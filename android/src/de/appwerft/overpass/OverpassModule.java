@@ -55,7 +55,8 @@ public class OverpassModule extends KrollModule {
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.setTimeout(TIMEOUT);
 		startTime = System.currentTimeMillis();
-		String url = ENDPOINT + "?data=" + URLEncoder.encode(query, "UTF-8");
+		String url = ENDPOINT + "?data=[out:json];"
+				+ URLEncoder.encode(query + "out body;", "UTF-8");
 		Log.d(LCAT, "URL===" + url);
 
 		client.get(url, null, new AsyncHttpResponseHandler() {
