@@ -13,14 +13,14 @@ OP.endpoint = OP.ENDPOINT_RAMBLER; // default
 
 // ENDPOINT_MAIN | ENDPOINT_RAMBLER | ENDPOINT_FRENCH
 
-
+// get the street "Kleine Freiheit in Hamburg"
 OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 	console.log(e);
 });
 
-OP.createRequest('area[name="Hamburg"];node["memorial:type"="stolperstein"];',
+// get all Stolpersteine in Hamburg
+OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
 		function(e) {
 			console.log(e);
-});
-
+		});
 ```

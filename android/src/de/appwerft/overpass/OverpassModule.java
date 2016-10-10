@@ -17,14 +17,67 @@ import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
+import org.json.*;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import cz.msebera.android.httpclient.Header;
 
 @Kroll.module(name = "Overpass", id = "de.appwerft.overpass")
 public class OverpassModule extends KrollModule {
+
+	private final class OverpassResponseHandler extends JsonHttpResponseHandler {
+		@Override
+		public void onFailure(int statusCode, Header[] headers,
+				Throwable throwable, JSONObject errorResponse) {
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers,
+				Throwable throwable, JSONArray errorResponse) {
+		}
+
+		@Override
+		public void onFailure(int statusCode, Header[] headers,
+				String responseString, Throwable throwable) {
+			if (onResult != null) {
+				Log.d(LCAT, "status=" + statusCode);
+				KrollDict dict = new KrollDict();
+				dict.put("status", statusCode);
+				if (System.currentTimeMillis() - startTime < 100) {
+					dict.put("error", "offline");
+					dict.put("message", "Host not reachable");
+				} else {
+					dict.put("error", "timeout");
+					dict.put("time", ""
+							+ (System.currentTimeMillis() - startTime));
+					dict.put("message", "Server don't answer in 30 sec. ");
+				}
+				onResult.call(getKrollObject(), dict);
+			}
+		}
+
+		@Override
+		public void onSuccess(int statusCode, Header[] headers,
+				JSONObject response) {
+
+			if (onResult != null) {
+				KrollDict res = new KrollDict();
+				res.put("success", true);
+				try {
+					res.put("result", new KrollDict(response));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				onResult.call(getKrollObject(), res);
+			}
+		}
+	}
+
 	private static final String LCAT = "Openpass";
 	@Kroll.constant
 	public static final String ENDPOINT_MAIN = "http://overpass-api.de/api/";
@@ -49,7 +102,7 @@ public class OverpassModule extends KrollModule {
 
 	@Kroll.method
 	public void createRequest(String query, Object res)
-			throws UnsupportedEncodingException {
+			throws UnsupportedEncodingException, JSONException {
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		AsyncHttpClient client = new AsyncHttpClient();
@@ -57,41 +110,8 @@ public class OverpassModule extends KrollModule {
 		startTime = System.currentTimeMillis();
 		String url = ENDPOINT + "?data=[out:json];"
 				+ URLEncoder.encode(query + "out body;", "UTF-8");
-		Log.d(LCAT, "URL===" + url);
-
-		client.get(url, null, new AsyncHttpResponseHandler() {
-			@Override
-			public void onFailure(int status, Header[] header, byte[] response,
-					Throwable arg3) {
-				if (onResult != null) {
-					Log.d(LCAT, "status=" + status);
-					KrollDict dict = new KrollDict();
-					dict.put("status", status);
-					if (System.currentTimeMillis() - startTime < 100) {
-						dict.put("error", "offline");
-						dict.put("message", "Host not reachable");
-					} else {
-						dict.put("error", "timeout");
-						dict.put("time", ""
-								+ (System.currentTimeMillis() - startTime));
-						dict.put("message", "Server don't answer in 30 sec. ");
-					}
-					onResult.call(getKrollObject(), dict);
-				}
-			}
-
-			@Override
-			public void onSuccess(int _status, Header[] _header,
-					byte[] _response) {
-				String response = new String(_response);
-				if (onResult != null) {
-					KrollDict res = new KrollDict();
-					res.put("success", true);
-					res.put("result", response);
-					onResult.call(getKrollObject(), res);
-				}
-			}
-		});
+		RequestParams params = null;
+		client.get(url, params, new OverpassResponseHandler());
 
 	}
 
