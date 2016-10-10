@@ -1,4 +1,4 @@
-<project name="openpass" default="dist">
+<project name="overpass" default="dist">
 	<description>
 		Ant build script for Titanium Android module openpass
 	</description>
