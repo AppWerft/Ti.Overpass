@@ -22,5 +22,27 @@ OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
 		function(e) {
 			console.log(e);
-		});
+});
 ```
+
+###Additional functions/methods
+```javascript
+OP.getPOIs({
+		area : {
+			latlng : [53.0,10]
+			radius : 5000 // m
+		},
+		"amenity" : "post_box"
+	},
+	function(e) {
+		console.log(e);
+});
+
+OP.getWay({
+		name : "Paul-Roosen-Straße".
+		area : "Hamburg"  // optional
+	},
+	function(e) {
+		console.log(e);
+});
+``
