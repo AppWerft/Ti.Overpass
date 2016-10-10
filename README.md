@@ -38,6 +38,13 @@ OP.getPOIs({
 		console.log(e);
 });
 
+OP.getPOIs({
+		"bbx" : [53.0,9.8,53.4,10.1],
+		"amenity" : "post_box"
+	},
+	function(e) {
+		console.log(e);
+});
 OP.getWay({
 		name : "Paul-Roosen-Straße".
 		area : "Hamburg"  // optional
