@@ -52,7 +52,7 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 [Result](http://overpass-turbo.eu/s/jg6)
 
 If we need the coords for rendering in map we have to resolve the references from ways to nodes.
-
+```javascript
 OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
 		function(e) {
 			var streets = (e.result.elements.filter(function(way){
@@ -82,7 +82,7 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 						
 			});			
 });
-
+``
 
 ###Retreiving all stuff from Hamburg's harbour area:
 
