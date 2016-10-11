@@ -19,12 +19,15 @@ You can put your own in tiapp.xml:
 ```
 
 ##Some examples:
-###Retreiving the street "Kleine Freiheit in Hamburg" as polyline
+###Retreiving the street "Am Brunnenhof" in Hamburg" as polyline
 ```javascript
-OP.createRequest('way["name"="Kleine Freiheit"];(._;>;);', function(e) {
+OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);', function(e) {
 	console.log(e);
 });
 ```
+Here the [result](http://overpass-turbo.eu/s/jfD)
+
+
 If the street name is not unique:
 ```javascript
 OP.createRequest('area[name="Amsterdam"];way(area)["name"="Docklandsweg"];(._;>;);', function(e) {
