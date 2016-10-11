@@ -2,17 +2,24 @@
 
 Titanium module for handling [Overpass protocol](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example).
 
-The Overpass API offers a variety of search possibilities. This is also known as querying.
+The Overpass API offers a variety of search possibilities. This is also known as querying. Lets look into usage.
 <img src="http://overpass-api.de/logo.png" width=600 />
 
 ##Usage
 ```javascript
 var OP = require("de.appwerft.overpass");
 OP.setEndpoint(OP.ENDPOINT_RAMBLER); // default
-OP.endpoint = OP.ENDPOINT_RAMBLER; // default
+```
+Possible endpoints:
+ENDPOINT_MAIN | ENDPOINT_RAMBLER | ENDPOINT_FRENCH
 
-// ENDPOINT_MAIN | ENDPOINT_RAMBLER | ENDPOINT_FRENCH
+You can put your own in tiapp.xml:
+```xml
+<property name="OVERPASS_ENDPOINT" type="String">YOUR ENDPOINT</property>
+```
 
+##Some examples:
+```javascript
 // get the street "Kleine Freiheit in Hamburg"
 OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 	console.log(e);
@@ -27,16 +34,6 @@ OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"
 
 ###Additional functions/methods
 ```javascript
-OP.getPOIs({
-		area : {
-			latlng : [53.0,10]
-			radius : 5000 // m
-		},
-		"amenity" : "post_box"
-	},
-	function(e) {
-		console.log(e);
-});
 
 OP.getPOIs({
 		"bbx" : [53.0,9.8,53.4,10.1],

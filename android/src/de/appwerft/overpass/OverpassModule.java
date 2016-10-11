@@ -10,17 +10,22 @@ package de.appwerft.overpass;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import org.appcelerator.kroll.KrollDict;
+import de.appwerft.krollplus.*;
+
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
+import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -70,7 +75,6 @@ public class OverpassModule extends KrollModule {
 				try {
 					res.put("result", new KrollDict(response));
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				onResult.call(getKrollObject(), res);
@@ -102,9 +106,45 @@ public class OverpassModule extends KrollModule {
 
 	@Kroll.method
 	public void createRequest(String query, Object res)
-			throws UnsupportedEncodingException, JSONException {
+			throws UnsupportedEncodingException {
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
+		doQuery(query);
+	}
+
+	@Kroll.method
+	public void getPOIs(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		if (res != null & res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		for (String key : options.keySet()) {
+			if (key.equals("bbx")) {
+				Float[] coords = toFloatArray(options.get("bbx"));
+			} else {
+
+			}
+		}
+
+	}
+
+	private Float[] toFloatArray(Object objectArray) {
+		if (!(objectArray.getClass().isArray())) {
+			throw new IllegalArgumentException("bbx must be an array");
+		}
+
+		Object[] coordsArray = (Object[]) objectArray;
+		Float[] floatArray = Arrays.copyOf(coordsArray, coordsArray.length,
+				Float[].class);
+		/*
+		 * float[] coords = new float[coordsArray.length];
+		 * 
+		 * for (int i = 0; i < coordsArray.length; i++) { coords[i] = ((Number)
+		 * coordsArray[i]).floatValue(); }
+		 */
+		return floatArray;
+	}
+
+	private void doQuery(String query) throws UnsupportedEncodingException {
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.setTimeout(TIMEOUT);
 		startTime = System.currentTimeMillis();
@@ -113,7 +153,7 @@ public class OverpassModule extends KrollModule {
 		RequestParams params = null;
 		client.get(url, params, new OverpassResponseHandler());
 
-	}
+	};
 
 	@Kroll.setProperty
 	public void setEndpoint(String ep) {
