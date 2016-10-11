@@ -28,7 +28,7 @@ OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 });
 ```
 If the street name is not unique:
-```javascript`
+```javascript
 OP.createRequest('area[name="Amsterdam"];way(area)["name"="Docklandsweg"];', function(e) {
 	console.log(e);
 });
