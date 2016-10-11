@@ -161,12 +161,13 @@ OP.getPOIs({
 });
 
 
-OP.getStreetNamesByPosition({
-		latitude : 53.5,
-		longitude : 10.01,
-		radius : 1000
+OP.getStreetsByPosition({
+		latitude : 53.5653801,
+		longitude : 9.98625,
+		radius : 250
 	},
 	function(e) {
 		console.log(e);
 });
-``
+//query: [out:json];way[highway][name](around:200,53.5653801,9.98625);(._;>;);out; 
+```
