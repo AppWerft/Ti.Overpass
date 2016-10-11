@@ -40,7 +40,7 @@ Answer:
 ```javascript
 OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
 		function(e) {
-			var streetnames = (e.result.filter(function(way){
+			var streetnames = (e.result.elements.filter(function(way){
 				return (way.type=="way") ? true : false;
 			})).map(function(way){return way.tags.name})
 });
@@ -56,33 +56,49 @@ OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"
 ```
 Answer:
 ```json
-<?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="Overpass API">
-<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
-<meta osm_base="2016-10-11T09:57:03Z" areas="2016-10-11T06:26:03Z"/>
+{
+  "version": 0.6,
+  "generator": "Overpass API",
+  "osm3s": {
+    "timestamp_osm_base": "2016-10-11T11:16:02Z",
+    "timestamp_areas_base": "2016-10-11T06:26:03Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
 
-  <node id="274098391" lat="53.5411726" lon="10.0474204">
-    <tag k="historic" v="memorial"/>
-    <tag k="memorial:addr" v="Großmannstraße, Hamburg"/>
-    <tag k="memorial:addr:city" v="Hamburg"/>
-    <tag k="memorial:addr:postcode" v="20539"/>
-    <tag k="memorial:addr:street" v="Großmannstraße"/>
-    <tag k="memorial:type" v="stolperstein"/>
-    <tag k="name" v="Alfons Ganser"/>
-    <tag k="network" v="Stolpersteine Hamburg"/>
-    <tag k="person:date_of_birth" v="1914"/>
-  </node>
-  <node id="341788109" lat="53.5586970" lon="10.0128167">
-    <tag k="addr:city" v="Hamburg"/>
-    <tag k="addr:country" v="DE"/>
-    <tag k="historic" v="memorial"/>
-    <tag k="memorial:addr" v="Lange Reihe 93, Hamburg"/>
-    <tag k="memorial:text" v="Hier wohnte Adolph Mannheimer JG. 1878 deportiert 1941 Minsk ???"/>
-    <tag k="memorial:type" v="stolperstein"/>
-    <tag k="name" v="Adolph Mannheimer"/>
-    <tag k="network" v="Stolpersteine Hamburg"/>
-  </node>
- </osm> 
+{
+  "type": "node",
+  "id": 274098391,
+  "lat": 53.5411726,
+  "lon": 10.0474204,
+  "tags": {
+    "historic": "memorial",
+    "memorial:addr": "Großmannstraße, Hamburg",
+    "memorial:addr:city": "Hamburg",
+    "memorial:addr:postcode": "20539",
+    "memorial:addr:street": "Großmannstraße",
+    "memorial:type": "stolperstein",
+    "name": "Alfons Ganser",
+    "network": "Stolpersteine Hamburg",
+    "person:date_of_birth": "1914"
+  }
+},
+{
+  "type": "node",
+  "id": 341788109,
+  "lat": 53.5586970,
+  "lon": 10.0128167,
+  "tags": {
+    "addr:city": "Hamburg",
+    "addr:country": "DE",
+    "historic": "memorial",
+    "memorial:addr": "Lange Reihe 93, Hamburg",
+    "memorial:text": "Hier wohnte Adolph Mannheimer JG. 1878 deportiert 1941 Minsk ???",
+    "memorial:type": "stolperstein",
+    "name": "Adolph Mannheimer",
+    "network": "Stolpersteine Hamburg"
+  }
+},
 ```
 
 ###All pos boxes in Hamburg
@@ -93,34 +109,42 @@ OP.createRequest('node["amenity"="post_box"](53.35,9.8,53.65,10.2);',
 });
 ```
 Answer:
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="Overpass API">
-<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
-<meta osm_base="2016-10-11T10:55:02Z"/>
+```json
+{
+  "version": 0.6,
+  "generator": "Overpass API",
+  "osm3s": {
+    "timestamp_osm_base": "2016-10-11T11:17:03Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
 
-  <node id="25699153" lat="53.4708618" lon="9.8526818">
-    <tag k="amenity" v="post_box"/>
-    <tag k="collection_times" v="Mo-Fr 16:30; Sa 11:15"/>
-    <tag k="collection_times:lastcheck" v="2016-05-01"/>
-    <tag k="operator" v="Deutsche Post AG"/>
-    <tag k="ref" v="Süderelbeweg / Marktpassage, 21149 Neugraben"/>
-  </node>
-  <node id="26263930" lat="53.4745387" lon="9.8944674">
-    <tag k="amenity" v="post_box"/>
-    <tag k="collection_times" v="Mo-Fr 17:15; Sa 13:15"/>
-    <tag k="collection_times:lastcheck" v="2016-05-01"/>
-    <tag k="operator" v="Deutsche Post AG"/>
-    <tag k="ref" v="Hausbrucher Bahnhofstraße / Wiedenthaler Bogen, 21147 Hamburg-Neugraben"/>
-  </node>
-  <node id="26284492" lat="53.4993434" lon="9.8952152">
-    <tag k="amenity" v="post_box"/>
-    <tag k="collection_times" v="Mo-Sa 08:00"/>
-    <tag k="collection_times:lastcheck" v="2016-05-08"/>
-    <tag k="operator" v="Deutsche Post AG"/>
-    <tag k="ref" v="Moorburger Elbdeich 401, 21079 Hamburg"/>
-  </node>
-</osm>
+{
+  "type": "node",
+  "id": 25699153,
+  "lat": 53.4708618,
+  "lon": 9.8526818,
+  "tags": {
+    "amenity": "post_box",
+    "collection_times": "Mo-Fr 16:30; Sa 11:15",
+    "collection_times:lastcheck": "2016-05-01",
+    "operator": "Deutsche Post AG",
+    "ref": "Süderelbeweg / Marktpassage, 21149 Neugraben"
+  }
+},
+{
+  "type": "node",
+  "id": 26263930,
+  "lat": 53.4745387,
+  "lon": 9.8944674,
+  "tags": {
+    "amenity": "post_box",
+    "collection_times": "Mo-Fr 17:15; Sa 13:15",
+    "collection_times:lastcheck": "2016-05-01",
+    "operator": "Deutsche Post AG",
+    "ref": "Hausbrucher Bahnhofstraße / Wiedenthaler Bogen, 21147 Hamburg-Neugraben"
+  }
+}
 ```
   
 
