@@ -35,6 +35,18 @@ Answer:
 
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=300 />
 
+
+###Retreiving all oneway streets in St. Pauli
+```javascript
+OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
+		function(e) {
+			var streetnames = (e.result.filter(function(way){
+				return (way.type=="way") ? true : false;
+			})).map(function(way){return way.tags.name})
+});
+```
+
+
 ###Retreiving  all Stolpersteine in Hamburg
 ```javascript
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
