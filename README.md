@@ -21,7 +21,7 @@ You can put your own in tiapp.xml:
 ##Some examples:
 ###Retreiving the street "Kleine Freiheit in Hamburg" as polyline
 ```javascript
-OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
+OP.createRequest('way["name"="Kleine Freiheit"];(._;>;);', function(e) {
 	console.log(e);
 });
 ```
