@@ -21,6 +21,7 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiProperties;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,10 +98,14 @@ public class OverpassModule extends KrollModule {
 
 	public OverpassModule() {
 		super();
+		TiProperties appProperties = TiApplication.getInstance()
+				.getAppProperties();
+		ENDPOINT = appProperties.getString("OVERPASS_ENDPOINT", "");
 	}
 
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
+
 		Log.d(LCAT, "inside onAppCreate");
 	}
 
