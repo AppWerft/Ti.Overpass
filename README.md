@@ -231,7 +231,7 @@ OP.getPOIs({
 	function(e) {
 		console.log(e);
 });
-
+```
 ###Retreiving streets by by position/radius or bounding box
 ```javascript
 OP.getStreetsByPosition({
