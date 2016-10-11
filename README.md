@@ -45,7 +45,7 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 			})).map(function(way){return way.tags.name})
 });
 ```
-<img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/1way.png" width=300 />
+<img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/1way.png" width=560 />
 
 
 ###Retreiving  all Stolpersteine in Hamburg
