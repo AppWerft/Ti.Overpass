@@ -20,10 +20,18 @@ You can put your own in tiapp.xml:
 
 ##Some examples:
 ```javascript
-// get the street "Kleine Freiheit in Hamburg"
+Retreiving the street "Kleine Freiheit in Hamburg" as polyline
+```javascript
 OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 	console.log(e);
 });
+```
+If the street name is not unique:
+```javascript`
+OP.createRequest('area[name="Amsterdam"];way(area)["name"="Docklandsweg"];', function(e) {
+	console.log(e);
+});
+```
 
 // get all Stolpersteine in Hamburg
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
