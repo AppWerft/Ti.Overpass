@@ -159,9 +159,12 @@ OP.getPOIs({
 	function(e) {
 		console.log(e);
 });
-OP.getWay({
-		name : "Paul-Roosen-Straße".
-		area : "Hamburg"  // optional
+
+
+OP.getStreetNamesByPosition({
+		latitude : 53.5,
+		longitude : 10.01,
+		radius : 1000
 	},
 	function(e) {
 		console.log(e);
