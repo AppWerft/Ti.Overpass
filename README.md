@@ -82,9 +82,9 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 						
 			});			
 });
-``
+```
 
-###Retreiving all stuff from Hamburg's harbour area:
+###Retreiving all stuff from Hamburgs harbour area:
 
 ```javascript
  var poly = "53.5437410 9.9611520 53.5345088 10.0158279 53.5249939 10.0419642 53.5146603 10.0578009 53.4929643 10.0469022 53.4735433 10.0599703 53.4732304 10.0349187 53.4696478 10.0112404 53.4782174 9.9223417 53.5089534 9.8797752 53.5355864 9.8845872 53.5431290 9.9498294"; 
