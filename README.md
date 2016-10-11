@@ -53,6 +53,36 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 
 If we need the coords for rendering in map we have to resolve the references from ways to nodes.
 
+OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
+		function(e) {
+			var streets = (e.result.elements.filter(function(way){
+				return (way.type=="way") ? true : false;
+			})).map(function(way){return {
+				name : way.tags.name,
+				nodes : way.nodes}})
+			// now every street has name and [nodes]
+			var polylines = [];
+			streets.forEach(function(street) {
+				function getNodebyId(id) {
+					return e.elements.filter(function(elem){
+						return (elem.type =="node"  && elem.id==id) ? true : false;
+					});
+				}
+				var points = street.nodes.map(function(node){
+					return {
+						latitude : getNodeById(node).lat, 
+						longitude : getNodeById(node).lon
+					};
+				});
+				
+				polylines.push({
+					name:street.name,
+					points: points
+				});
+						
+			});			
+});
+
 
 ###Retreiving all stuff from Hamburg's harbour area:
 
