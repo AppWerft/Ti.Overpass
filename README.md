@@ -49,6 +49,11 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 });
 ```
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/1way.png" width=560 />
+[Result](http://overpass-turbo.eu/s/jg6)
+
+If we need the coords for rendering in map we have to resolve the references from ways to nodes.
+
+
 ###Retreiving all stuff from Hamburg's harbour area:
 
 ```javascript
