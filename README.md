@@ -169,5 +169,15 @@ OP.getStreetsByPosition({
 	function(e) {
 		console.log(e);
 });
-//query: [out:json];way[highway][name](around:200,53.5653801,9.98625);(._;>;);out; 
+
+OP.getAmenitiesByPosition({
+		latitude : 53.5653801,
+		longitude : 9.98625,
+		radius : 250,
+		types : "swingerclub,stripclub"  // http://wiki.openstreetmap.org/wiki/Key:amenity
+	},
+	function(e) {
+		console.log(e);
+});
+
 ```
