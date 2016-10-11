@@ -19,9 +19,7 @@ You can put your own in tiapp.xml:
 ```
 
 ##Some examples:
-```javascript
-Retreiving the street "Kleine Freiheit in Hamburg" as polyline
-```
+###Retreiving the street "Kleine Freiheit in Hamburg" as polyline
 ```javascript
 OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 	console.log(e);
@@ -37,7 +35,7 @@ Answer:
 
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=300 />
 
-Retreiving  all Stolpersteine in Hamburg
+###Retreiving  all Stolpersteine in Hamburg
 ```javascript
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
 		function(e) {
