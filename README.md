@@ -171,10 +171,10 @@ OP.getStreetsByPosition({
 });
 
 OP.getAmenitiesByPosition({
-		latitude : 53.5653801,
-		longitude : 9.98625,
-		radius : 250,
-		types : "swingerclub,stripclub"  // http://wiki.openstreetmap.org/wiki/Key:amenity
+		latitude : 53.5515311,  // Reeperbahn /St. Pauli
+		longitude : 9.9556582,
+		radius : 750,
+		types : ["swingerclub","stripclub"]  // http://wiki.openstreetmap.org/wiki/Key:amenity
 	},
 	function(e) {
 		console.log(e);

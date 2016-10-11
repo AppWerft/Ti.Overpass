@@ -9,6 +9,7 @@
 package de.appwerft.overpass;
 
 import java.io.UnsupportedEncodingException;
+import org.apache.commons.lang3.StringUtils;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,6 +134,35 @@ public class OverpassModule extends KrollModule {
 				}
 				String query = "way[highway][name](around:" + radius + ","
 						+ lat + "," + lon + ");(._;>;)";
+				doQuery(query);
+			}
+		}
+
+	}
+
+	@Kroll.method
+	public void getAmenitiesByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		if (res != null & res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		double radius = 1000.0;
+		@SuppressWarnings("unused")
+		String[] types = {};
+		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
+			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
+			if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
+				double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
+				if (options.containsKeyAndNotNull("radius")) {
+					radius = options.getDouble("radius");
+				}
+				if (options.containsKeyAndNotNull("types")) {
+					types = options.getStringArray("types");
+				}
+				String typesString = StringUtils.join(types, "|");
+				String query = "node[~\"^(amenity)$\"~(" + typesString
+						+ ")(around:" + radius + "," + lat + "," + lon
+						+ ");(._;>;)";
+				Log.d(LCAT, "overpass-Query: " + query);
 				doQuery(query);
 			}
 		}
