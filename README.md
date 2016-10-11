@@ -212,9 +212,10 @@ Answer:
 ```
   
 
-###Additional functions/methods
-```javascript
+##Additional functions/methods
 
+###Retreiving of aminities by position/radius or bounding box
+```javascript
 OP.getPOIs({
 		"bbx" : [53.0,9.8,53.4,10.1],
 		"amenity" : "post_box"
@@ -222,8 +223,17 @@ OP.getPOIs({
 	function(e) {
 		console.log(e);
 });
+OP.getPOIs({
+		latitude : 53.5653801,
+		longitude : 9.98625,
+		radius : 250
+	},
+	function(e) {
+		console.log(e);
+});
 
-
+###Retreiving streets by by position/radius or bounding box
+```javascript
 OP.getStreetsByPosition({
 		latitude : 53.5653801,
 		longitude : 9.98625,
