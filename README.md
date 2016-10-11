@@ -21,6 +21,7 @@ You can put your own in tiapp.xml:
 ##Some examples:
 ```javascript
 Retreiving the street "Kleine Freiheit in Hamburg" as polyline
+```
 ```javascript
 OP.createRequest('way["name"="Kleine Freiheit"];', function(e) {
 	console.log(e);
@@ -33,7 +34,8 @@ OP.createRequest('area[name="Amsterdam"];way(area)["name"="Docklandsweg"];', fun
 });
 ```
 
-// get all Stolpersteine in Hamburg
+Retreiving  all Stolpersteine in Hamburg
+```javascript
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
 		function(e) {
 			console.log(e);
