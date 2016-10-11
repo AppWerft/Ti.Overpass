@@ -226,7 +226,8 @@ OP.getPOIs({
 OP.getPOIs({
 		latitude : 53.5653801,
 		longitude : 9.98625,
-		radius : 250
+		radius : 250,
+		"amenity" : "post_box"
 	},
 	function(e) {
 		console.log(e);
@@ -237,7 +238,8 @@ OP.getPOIs({
 OP.getStreetsByPosition({
 		latitude : 53.5653801,
 		longitude : 9.98625,
-		radius : 250
+		radius : 250,
+		types : ["swingerclub","stripclub"]  // http://wiki.openstreetmap.org/wiki/Key:amenity
 	},
 	function(e) {
 		console.log(e);
