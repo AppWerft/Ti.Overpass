@@ -72,8 +72,47 @@ Answer:
     <tag k="name" v="Adolph Mannheimer"/>
     <tag k="network" v="Stolpersteine Hamburg"/>
   </node>
- </meta> 
+ </osm> 
 ```
+
+###All pos boxes in Hamburg
+```javascript
+OP.createRequest('node["amenity"="post_box"](53.35,9.8,53.65,10.2);',
+		function(e) {
+			console.log(e);
+});
+```
+Answer:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2016-10-11T10:55:02Z"/>
+
+  <node id="25699153" lat="53.4708618" lon="9.8526818">
+    <tag k="amenity" v="post_box"/>
+    <tag k="collection_times" v="Mo-Fr 16:30; Sa 11:15"/>
+    <tag k="collection_times:lastcheck" v="2016-05-01"/>
+    <tag k="operator" v="Deutsche Post AG"/>
+    <tag k="ref" v="Süderelbeweg / Marktpassage, 21149 Neugraben"/>
+  </node>
+  <node id="26263930" lat="53.4745387" lon="9.8944674">
+    <tag k="amenity" v="post_box"/>
+    <tag k="collection_times" v="Mo-Fr 17:15; Sa 13:15"/>
+    <tag k="collection_times:lastcheck" v="2016-05-01"/>
+    <tag k="operator" v="Deutsche Post AG"/>
+    <tag k="ref" v="Hausbrucher Bahnhofstraße / Wiedenthaler Bogen, 21147 Hamburg-Neugraben"/>
+  </node>
+  <node id="26284492" lat="53.4993434" lon="9.8952152">
+    <tag k="amenity" v="post_box"/>
+    <tag k="collection_times" v="Mo-Sa 08:00"/>
+    <tag k="collection_times:lastcheck" v="2016-05-08"/>
+    <tag k="operator" v="Deutsche Post AG"/>
+    <tag k="ref" v="Moorburger Elbdeich 401, 21079 Hamburg"/>
+  </node>
+</osm>
+```
+  
 
 ###Additional functions/methods
 ```javascript
