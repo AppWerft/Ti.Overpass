@@ -33,6 +33,9 @@ OP.createRequest('area[name="Amsterdam"];way(area)["name"="Docklandsweg"];(._;>;
 	console.log(e);
 });
 ```
+Answer:
+
+<img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=600 />
 
 Retreiving  all Stolpersteine in Hamburg
 ```javascript
