@@ -2,7 +2,6 @@ package de.appwerft.overpass;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
-
 import org.appcelerator.kroll.KrollObject;
 import org.appcelerator.kroll.common.Log;
 import org.json.JSONArray;
@@ -26,6 +25,12 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 
 	public void setStarttime(long startTime) {
 		this.startTime = startTime;
+	}
+
+	public onResultListener resultListener;
+
+	public interface onResultListener {
+		public void onResult(KrollDict dict);
 	}
 
 	@Override

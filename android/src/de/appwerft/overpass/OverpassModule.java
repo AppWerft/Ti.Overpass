@@ -88,7 +88,6 @@ public class OverpassModule extends KrollModule {
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		double radius = 1000.0;
-		@SuppressWarnings("unused")
 		String[] types = {};
 		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
 			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
@@ -150,8 +149,8 @@ public class OverpassModule extends KrollModule {
 		String url = ENDPOINT + "?data=[out:json];"
 				+ URLEncoder.encode(query + "out body;", "UTF-8");
 		RequestParams params = null;
-		OverpassResponseHandler respHandler = new OverpassResponseHandler();
-		respHandler.setKroll(getKrollObject(), onResult);
+		OverpassResponseHandler respHandler = new OverpassResponseHandler(
+				getKrollObject(), onResult);
 		respHandler.setStarttime(System.currentTimeMillis());
 		client.get(url, params, respHandler);
 	};
