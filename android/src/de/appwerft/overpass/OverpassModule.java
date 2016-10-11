@@ -21,6 +21,7 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.TiProperties;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,6 +116,27 @@ public class OverpassModule extends KrollModule {
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		doQuery(query);
+	}
+
+	@Kroll.method
+	public void getStreetsByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		if (res != null & res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		double radius = 1000.0;
+		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
+			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
+			if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
+				double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
+				if (options.containsKeyAndNotNull("radius")) {
+					radius = options.getDouble("radius");
+				}
+				String query = "way[highway][name](around:" + radius + ","
+						+ lat + "," + lon + ");(._;>;)";
+				doQuery(query);
+			}
+		}
+
 	}
 
 	@Kroll.method
