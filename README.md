@@ -6,6 +6,8 @@ The Overpass API offers a variety of search possibilities. This is also known as
 <img src="http://overpass-api.de/logo.png" width=600 />
 
 ##Usage
+
+First we need a reference to the module:
 ```javascript
 var OP = require("de.appwerft.overpass");
 ```
@@ -15,7 +17,68 @@ You can put your own endpoint (if you maintain an own server) in tiapp.xml:
 <property name="OVERPASS_ENDPOINT" type="String">YOUR ENDPOINT</property>
 ```
 
-##Some examples:
+Let's start with a simple convenient example. We need all street names nearby a position:
+
+###Retreiving streets nearby, only the names (perhaps for auto completer of an input field)
+```javascript
+OP.getStreetNamesByPosition({
+		latitude : 53.5515311,  // MIN Dekanat
+		longitude : 9.9556582,
+		radius : 500
+	},
+	function(e) {
+		console.log(e);
+});
+```
+
+With this result:
+```json
+{
+	"result" : {
+		"names" : [ "Universität/Staatsbibliothek", "Heimweg",
+				"An der Verbindungsbahn", "Rutschbahn", "Durchschnitt",
+				"Dag-Hammarskjöld-Platz", "Rentzelstraße", "Hartungstraße",
+				"Moorweidenstraße", "Rappstraße", "Tiergartenstraße",
+				"Johnsallee", "Theodor-Heuss-Platz", "Laufgraben",
+				"Joseph-Carlebach-Platz", "Grindelweg", "Heimhuder Straße",
+				"Grindelhof", "Tesdorpfstraße", "Mittelweg",
+				"Martin-Luther-King-Platz" ]
+	},
+	"success" : true
+};
+```
+
+Maybe we need all detailed informations about our streets:
+###Retreiving streets by by position/radius
+```javascript
+OP.getStreetsByPosition({
+		latitude : 53.5653801,
+		longitude : 9.98625,
+		radius : 500 // 0.5 km
+	},
+	function(e) {
+		console.log(e);
+});
+```
+
+The next convenience function give us all post boxes.
+
+###Retreiving of aminities by position/radius or bounding box
+```javascript
+
+OP.getPOIs({
+		latitude : 53.5653801,
+		longitude : 9.98625,
+		radius : 250,
+		"amenity" : "post_box"
+	},
+	function(e) {
+		console.log(e);
+});
+```
+
+If this convenience function are not enough you can use more generic functions:
+
 
 ###Retreiving the street "Am Brunnenhof" in Hamburg" as polyline
 ```javascript
@@ -223,69 +286,3 @@ Answer:
   }
 }
 ```
-  
-
-##Additional functions/methods
-
-###Retreiving of aminities by position/radius or bounding box
-```javascript
-OP.getPOIs({
-		"bbx" : [53.0,9.8,53.4,10.1],
-		"amenity" : "post_box"
-	},
-	function(e) {
-		console.log(e);
-});
-OP.getPOIs({
-		latitude : 53.5653801,
-		longitude : 9.98625,
-		radius : 250,
-		"amenity" : "post_box"
-	},
-	function(e) {
-		console.log(e);
-});
-```
-###Retreiving streets by by position/radius or bounding box
-```javascript
-OP.getStreetsByPosition({
-		latitude : 53.5653801,
-		longitude : 9.98625,
-		radius : 500 // 0.5 km
-	},
-	function(e) {
-		console.log(e);
-});
-```
-###Retreiving the same streets, but only the names (perhaps for auto completer of an input field)
-```javascripr
-OP.getStreetNamesByPosition({
-		latitude : 53.5515311,  // MIN Dekanat
-		longitude : 9.9556582,
-		radius : 500
-	},
-	function(e) {
-		console.log(e);
-});
-```
-
-With this result:
-```json
-{
-	"result" : {
-		"names" : [ "Universität/Staatsbibliothek", "Heimweg",
-				"An der Verbindungsbahn", "Rutschbahn", "Durchschnitt",
-				"Dag-Hammarskjöld-Platz", "Rentzelstraße", "Hartungstraße",
-				"Bundesstraße", "Bundesweg", "Edmund-Siemers-Allee",
-				"Bieberstraße", "Binderstraße", "Rothenbaumchaussee",
-				"Dillstraße", "Feldbrunnenstraße", "Marseiller Straße",
-				"Bornstraße", "Grindelallee", "Schlüterstraße", "Fröbelstraße",
-				"Moorweidenstraße", "Rappstraße", "Tiergartenstraße",
-				"Johnsallee", "Theodor-Heuss-Platz", "Laufgraben",
-				"Joseph-Carlebach-Platz", "Grindelweg", "Heimhuder Straße",
-				"Grindelhof", "Tesdorpfstraße", "Mittelweg",
-				"Martin-Luther-King-Platz" ]
-	},
-	"success" : true
-};
-``
