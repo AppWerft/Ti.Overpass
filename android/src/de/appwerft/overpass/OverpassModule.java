@@ -37,7 +37,7 @@ public class OverpassModule extends KrollModule {
 	public static final String ENDPOINT_FRENCH = "http://api.openstreetmap.fr/oapi/interpreter/";
 	private String ENDPOINT = ENDPOINT_FRENCH;
 	private int TIMEOUT = 30000;
-
+	private String out = "body";
 	private KrollFunction onResult;
 
 	public OverpassModule() {
@@ -54,11 +54,14 @@ public class OverpassModule extends KrollModule {
 	}
 
 	@Kroll.method
-	public void createRequest(String query, Object res)
+	public void createRequest(String query, String out, Object res)
 			throws UnsupportedEncodingException {
+		if (out != null && (out == "skel" || out == "meta" || out == "body")) {
+			this.out = out;
+		}
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
-		doQuery(query);
+		doQuery(query, null);
 	}
 
 	@Kroll.method
@@ -76,7 +79,7 @@ public class OverpassModule extends KrollModule {
 				}
 				String query = "way[highway][name](around:" + radius + ","
 						+ lat + "," + lon + ");(._;>;)";
-				doQuery(query);
+				doQuery(query, "getWays");
 			}
 		}
 
@@ -104,7 +107,7 @@ public class OverpassModule extends KrollModule {
 						+ ")(around:" + radius + "," + lat + "," + lon
 						+ ");(._;>;)";
 				Log.d(LCAT, "overpass-Query: " + query);
-				doQuery(query);
+				doQuery(query, null);
 			}
 		}
 
@@ -142,16 +145,17 @@ public class OverpassModule extends KrollModule {
 		return floatArray;
 	}
 
-	private void doQuery(String query) throws UnsupportedEncodingException {
+	private void doQuery(String query, String postProcess)
+			throws UnsupportedEncodingException {
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.setTimeout(TIMEOUT);
 
 		String url = ENDPOINT + "?data=[out:json];"
-				+ URLEncoder.encode(query + "out body;", "UTF-8");
+				+ URLEncoder.encode(query + "out " + out + ";", "UTF-8");
 		RequestParams params = null;
 		OverpassResponseHandler respHandler = new OverpassResponseHandler(
-				getKrollObject(), onResult);
-		respHandler.setStarttime(System.currentTimeMillis());
+				getKrollObject(), onResult, postProcess);
+
 		client.get(url, params, respHandler);
 	};
 

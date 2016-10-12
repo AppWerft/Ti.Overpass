@@ -8,12 +8,11 @@ The Overpass API offers a variety of search possibilities. This is also known as
 ##Usage
 ```javascript
 var OP = require("de.appwerft.overpass");
-OP.setEndpoint(OP.ENDPOINT_RAMBLER); // default
+OP.setEndpoint(OP.ENDPOINT_RAMBLER); // optiona, default is OP.ENDPOINT_RAMBLER
 ```
-Possible endpoints:
-ENDPOINT_MAIN | ENDPOINT_RAMBLER | ENDPOINT_FRENCH
+Possible endpoints are ENDPOINT_MAIN, ENDPOINT_RAMBLER, ENDPOINT_FRENCH
 
-You can put your own in tiapp.xml:
+You can put your own endpoint (if you maintain an own server) in tiapp.xml:
 ```xml
 <property name="OVERPASS_ENDPOINT" type="String">YOUR ENDPOINT</property>
 ```
@@ -21,27 +20,28 @@ You can put your own in tiapp.xml:
 ##Some examples:
 ###Retreiving the street "Am Brunnenhof" in Hamburg" as polyline
 ```javascript
-OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);', function(e) {
-	console.log(e);
+OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);',
+	null, 
+	function(e) {
+		console.log(e);
 });
 ```
-Here the [result](http://overpass-turbo.eu/s/jfD)
+The second parameter defines the output format. Can be 'skel' (only positions), 'body' (default) or 'meta'
+Here the [result of this query](http://overpass-turbo.eu/s/jfD)
 
-
-If the street name is not unique:
+If the street name is not unique on our planet, the you can filter:
 ```javascript
-OP.createRequest('area[name="Amsterdam"];way(area)["name"="Docklandsweg"];(._;>;);', function(e) {
+OP.createRequest('area[name="Amsterdam"];way(area)["name"="Prinsengracht"];(._;>;);',null, function(e) {
 	console.log(e);
 });
 ```
-Answer:
-
-<img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=300 />
+Answer you can find [here](http://overpass-turbo.eu/s/jhk).
 
 
 ###Retreiving all one-way streets in St. Pauli
 ```javascript
 OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
+		null,
 		function(e) {
 			var streetnames = (e.result.elements.filter(function(way){
 				return (way.type=="way") ? true : false;
@@ -49,12 +49,13 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 });
 ```
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/1way.png" width=560 />
-[Result](http://overpass-turbo.eu/s/jg6)
+[Result on turboOverpass](http://overpass-turbo.eu/s/jg6)
 
 If we need the coords for rendering in map we have to resolve the references from ways to nodes.
 
 ```javascript
 OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
+		null,
 		function(e) {
 			var streets = (e.result.elements.filter(function(way){
 				return (way.type=="way") ? true : false;
@@ -89,6 +90,7 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 ```javascript
  var poly = "53.5437410 9.9611520 53.5345088 10.0158279 53.5249939 10.0419642 53.5146603 10.0578009 53.4929643 10.0469022 53.4735433 10.0599703 53.4732304 10.0349187 53.4696478 10.0112404 53.4782174 9.9223417 53.5089534 9.8797752 53.5355864 9.8845872 53.5431290 9.9498294"; 
 OP.createRequest('node(poly:poly)["name"]',
+	null,
 	function(e) {
 });
 ```
@@ -97,6 +99,7 @@ Give us 671 nodes. [Result](http://overpass-turbo.eu/s/jg5)
 ###Generating of all annotations;
 ```javascript`
 OP.createRequest('node(poly:poly)["name"]["amenity"]',
+	null,
 	function(e) {
 		TiMapView.addAnnotations(e.elements.map(function(node){
 			Ti.Map.createAnnotation({
@@ -114,6 +117,7 @@ OP.createRequest('node(poly:poly)["name"]["amenity"]',
 ###Retreiving  all Stolpersteine in Hamburg
 ```javascript
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
+		null,
 		function(e) {
 			console.log(e);
 });
@@ -168,6 +172,7 @@ Answer:
 ###All pos boxes in Hamburg
 ```javascript
 OP.createRequest('node["amenity"="post_box"](53.35,9.8,53.65,10.2);',
+		null,
 		function(e) {
 			console.log(e);
 });

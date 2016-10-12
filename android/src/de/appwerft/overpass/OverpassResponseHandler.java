@@ -1,5 +1,8 @@
 package de.appwerft.overpass;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollObject;
@@ -17,14 +20,18 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 	private KrollFunction onResult;
 	private String LCAT = OverpassModule.LCAT;
 	private long startTime;
+	private String postProcessMethodName = "passThrue";
 
-	public void setKroll(KrollObject o, KrollFunction cb) {
+	public OverpassResponseHandler(KrollObject o, KrollFunction cb,
+			String postProcess) {
 		krollObject = o;
 		onResult = cb;
+		postProcessMethodName = postProcess;
+		startTime = System.currentTimeMillis();
 	}
 
-	public void setStarttime(long startTime) {
-		this.startTime = startTime;
+	public void setPostProcess(String postProcess) {
+		this.postProcessMethodName = postProcess;
 	}
 
 	public onResultListener resultListener;
@@ -65,15 +72,33 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 	@Override
 	public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 		if (onResult != null) {
-			KrollDict res = new KrollDict();
-			res.put("success", true);
+			PostProcess postProcess;
 			try {
-				res.put("result", new KrollDict(response));
-			} catch (JSONException e) {
-				e.printStackTrace();
+				postProcess = new PostProcess(response);
+				Method method = null;
+				try {
+					method = postProcess.getClass().getMethod(
+							postProcessMethodName);
+				} catch (SecurityException e) {
+				} catch (NoSuchMethodException e) {
+				}
+				try {
+					Object obj = method.invoke(postProcess);
+					if (obj instanceof JSONObject) {
+						KrollDict res = new KrollDict();
+						res.put("success", true);
+						res.put("result", (JSONObject) obj);
+						onResult.call(krollObject, res);
+					}
+				} catch (IllegalArgumentException e) {
+				} catch (IllegalAccessException e) {
+				} catch (InvocationTargetException e) {
+				}
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			onResult.call(krollObject, res);
+
 		}
 	}
-
 }
