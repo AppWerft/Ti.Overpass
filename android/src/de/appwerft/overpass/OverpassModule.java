@@ -36,7 +36,7 @@ public class OverpassModule extends KrollModule {
 	@Kroll.constant
 	public static final String ENDPOINT_FRENCH = "http://api.openstreetmap.fr/oapi/interpreter/";
 	private String ENDPOINT = ENDPOINT_FRENCH;
-	private int TIMEOUT = 30000;
+	private int TIMEOUT = 120000;
 	private String out = "body";
 	private KrollFunction onResult;
 
@@ -94,8 +94,10 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getStreetsByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (res != null & res instanceof KrollFunction)
+		if (res != null && res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
+		else
+			Log.e(LCAT, "getStreetsByPosition has no callback for result");
 		double radius = 1000.0;
 		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
 			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
@@ -105,11 +107,32 @@ public class OverpassModule extends KrollModule {
 					radius = options.getDouble("radius");
 				}
 				String query = "way[highway][name](around:" + radius + ","
-						+ lat + "," + lon + ");(._;>;)";
+						+ lat + "," + lon + ");(._;>;);";
 				doQuery(query, "getWays");
 			}
 		}
+	}
 
+	@Kroll.method
+	public void getStreetNamesByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		if (res != null && res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		else
+			Log.e(LCAT, "getStreetsByPosition has no callback for result");
+		double radius = 1000.0;
+		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
+			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
+			if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
+				double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
+				if (options.containsKeyAndNotNull("radius")) {
+					radius = options.getDouble("radius");
+				}
+				String query = "way[highway][name](around:" + radius + ","
+						+ lat + "," + lon + ");(._;>;);";
+				doQuery(query, "getStreetNames");
+			}
+		}
 	}
 
 	@Kroll.method
@@ -174,15 +197,15 @@ public class OverpassModule extends KrollModule {
 
 	private void doQuery(String query, String postProcess)
 			throws UnsupportedEncodingException {
+		Log.d(LCAT, query);
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.setTimeout(TIMEOUT);
-
 		String url = ENDPOINT + "?data=[out:json];"
 				+ URLEncoder.encode(query + "out " + out + ";", "UTF-8");
+		Log.d(LCAT, url);
 		RequestParams params = null;
 		OverpassResponseHandler respHandler = new OverpassResponseHandler(
 				getKrollObject(), onResult, postProcess);
-
 		client.get(url, params, respHandler);
 	};
 

@@ -79,6 +79,7 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 				}
 				try {
 					Object obj = method.invoke(postProcess);
+
 					if (obj instanceof JSONObject) {
 						KrollDict res = new KrollDict();
 						res.put("success", true);

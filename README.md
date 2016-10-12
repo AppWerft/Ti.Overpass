@@ -253,19 +253,41 @@ OP.getPOIs({
 OP.getStreetsByPosition({
 		latitude : 53.5653801,
 		longitude : 9.98625,
-		radius : 5000 // 5 km
+		radius : 500 // 0.5 km
 	},
 	function(e) {
 		console.log(e);
 });
-
-OP.getStreetsByPosition({
-		latitude : 53.5515311,  // Reeperbahn /St. Pauli
-		longitude : 9.9556582,
-		radius : 5000
-	},
-	function(e) {
-		console.log(e);
-});
-
 ```
+###Retreiving the same streets, but only the names (perhaps for auto completer of an input field)
+```javascripr
+OP.getStreetNamesByPosition({
+		latitude : 53.5515311,  // MIN Dekanat
+		longitude : 9.9556582,
+		radius : 500
+	},
+	function(e) {
+		console.log(e);
+});
+```
+
+With this result:
+```json
+{
+	"result" : {
+		"names" : [ "Universität/Staatsbibliothek", "Heimweg",
+				"An der Verbindungsbahn", "Rutschbahn", "Durchschnitt",
+				"Dag-Hammarskjöld-Platz", "Rentzelstraße", "Hartungstraße",
+				"Bundesstraße", "Bundesweg", "Edmund-Siemers-Allee",
+				"Bieberstraße", "Binderstraße", "Rothenbaumchaussee",
+				"Dillstraße", "Feldbrunnenstraße", "Marseiller Straße",
+				"Bornstraße", "Grindelallee", "Schlüterstraße", "Fröbelstraße",
+				"Moorweidenstraße", "Rappstraße", "Tiergartenstraße",
+				"Johnsallee", "Theodor-Heuss-Platz", "Laufgraben",
+				"Joseph-Carlebach-Platz", "Grindelweg", "Heimhuder Straße",
+				"Grindelhof", "Tesdorpfstraße", "Mittelweg",
+				"Martin-Luther-King-Platz" ]
+	},
+	"success" : true
+};
+``
