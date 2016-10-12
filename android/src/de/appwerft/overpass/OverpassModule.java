@@ -28,7 +28,7 @@ import com.loopj.android.http.RequestParams;
 @Kroll.module(name = "Overpass", id = "de.appwerft.overpass")
 public class OverpassModule extends KrollModule {
 
-	public static final String LCAT = "Openpass";
+	public static final String LCAT = "OverPass 🐌🐜";
 	@Kroll.constant
 	public static final String ENDPOINT_MAIN = "http://overpass-api.de/api/";
 	@Kroll.constant
@@ -42,9 +42,9 @@ public class OverpassModule extends KrollModule {
 
 	public OverpassModule() {
 		super();
-		TiProperties appProperties = TiApplication.getInstance()
-				.getAppProperties();
-		ENDPOINT = appProperties.getString("OVERPASS_ENDPOINT", "");
+		TiProperties appProps = TiApplication.getInstance().getAppProperties();
+		if (appProps.hasProperty("OVERPASS_ENDPOINT"))
+			ENDPOINT = appProps.getString("OVERPASS_ENDPOINT", ENDPOINT_FRENCH);
 	}
 
 	@Kroll.onAppCreate
@@ -59,6 +59,33 @@ public class OverpassModule extends KrollModule {
 		if (out != null && (out == "skel" || out == "meta" || out == "body")) {
 			this.out = out;
 		}
+		if (res != null & res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		doQuery(query, null);
+	}
+
+	@Kroll.method
+	public void getBody(String query, Object res)
+			throws UnsupportedEncodingException {
+		this.out = "body";
+		if (res != null & res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		doQuery(query, null);
+	}
+
+	@Kroll.method
+	public void getSkel(String query, Object res)
+			throws UnsupportedEncodingException {
+		this.out = "skel";
+		if (res != null & res instanceof KrollFunction)
+			onResult = (KrollFunction) res;
+		doQuery(query, null);
+	}
+
+	@Kroll.method
+	public void getMeta(String query, Object res)
+			throws UnsupportedEncodingException {
+		this.out = "meta";
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		doQuery(query, null);

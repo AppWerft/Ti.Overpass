@@ -13,7 +13,7 @@ public class PostProcess {
 		this.elements = this.foo.getJSONArray("elements");
 	}
 
-	public JSONObject passThrue() {
+	public JSONObject passThrough() {
 		return foo;
 	}
 

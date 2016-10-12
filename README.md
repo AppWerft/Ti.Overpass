@@ -26,12 +26,19 @@ OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);',
 		console.log(e);
 });
 ```
-The second parameter defines the output format. Can be 'skel' (only positions), 'body' (default) or 'meta'
+The second parameter defines the output format. Can be 'skel' (only positions), 'body' (default) or 'meta'.
+For your convenience you can use the following methods too:
+```javascript
+getBody(query,function(){});
+getSkel(query,function(){});
+getMeta(query,function(){});
+```
+
 Here the [result of this query](http://overpass-turbo.eu/s/jfD)
 
 If the street name is not unique on our planet, the you can filter:
 ```javascript
-OP.createRequest('area[name="Amsterdam"];way(area)["name"="Prinsengracht"];(._;>;);',null, function(e) {
+OP.getBody('area[name="Amsterdam"];way(area)["name"="Prinsengracht"];(._;>;);', function(e) {
 	console.log(e);
 });
 ```
@@ -40,15 +47,15 @@ Answer you can find [here](http://overpass-turbo.eu/s/jhk).
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=560 />
 
 
-
 ###Retreiving all one-way streets in St. Pauli
 ```javascript
-OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
-		null,
+OP.getBody('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
 		function(e) {
-			var streetnames = (e.result.elements.filter(function(way){
-				return (way.type=="way") ? true : false;
-			})).map(function(way){return way.tags.name})
+			if (e.success==true)
+				var streetnames = (e.result.elements.filter(function(way){
+					return (way.type=="way") ? true : false;
+				})).map(function(way){return way.tags.name});
+			else console.log(e.error);	
 });
 ```
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/1way.png" width=560 />

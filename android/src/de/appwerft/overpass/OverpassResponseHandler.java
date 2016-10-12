@@ -20,24 +20,17 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 	private KrollFunction onResult;
 	private String LCAT = OverpassModule.LCAT;
 	private long startTime;
-	private String postProcessMethodName = "passThrue";
+	final private String DEFAULTPOSTPROCESS = "passThrough";
+	private String postProcessMethodName = DEFAULTPOSTPROCESS;
 
 	public OverpassResponseHandler(KrollObject o, KrollFunction cb,
-			String postProcess) {
+			String postProcessMethodName) {
 		krollObject = o;
 		onResult = cb;
-		postProcessMethodName = postProcess;
+		if (postProcessMethodName != null) // in out case default "passthrough"
+			this.postProcessMethodName = postProcessMethodName;
 		startTime = System.currentTimeMillis();
-	}
-
-	public void setPostProcess(String postProcess) {
-		this.postProcessMethodName = postProcess;
-	}
-
-	public onResultListener resultListener;
-
-	public interface onResultListener {
-		public void onResult(KrollDict dict);
+		Log.d(LCAT, "postProcessMethodName=" + postProcessMethodName);
 	}
 
 	@Override
@@ -72,6 +65,8 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 	@Override
 	public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 		if (onResult != null) {
+			Log.d(LCAT, "try to start postprocess >>>>>>>> "
+					+ postProcessMethodName);
 			PostProcess postProcess;
 			try {
 				postProcess = new PostProcess(response);
@@ -87,7 +82,7 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 					if (obj instanceof JSONObject) {
 						KrollDict res = new KrollDict();
 						res.put("success", true);
-						res.put("result", (JSONObject) obj);
+						res.put("result", new KrollDict((JSONObject) obj));
 						onResult.call(krollObject, res);
 					}
 				} catch (IllegalArgumentException e) {
@@ -95,7 +90,6 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 				} catch (InvocationTargetException e) {
 				}
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
