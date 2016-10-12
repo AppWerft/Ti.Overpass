@@ -37,6 +37,9 @@ OP.createRequest('area[name="Amsterdam"];way(area)["name"="Prinsengracht"];(._;>
 ```
 Answer you can find [here](http://overpass-turbo.eu/s/jhk).
 
+<img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=560 />
+
+
 
 ###Retreiving all one-way streets in St. Pauli
 ```javascript
