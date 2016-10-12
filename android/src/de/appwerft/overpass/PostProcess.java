@@ -1,7 +1,6 @@
 package de.appwerft.overpass;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.appcelerator.kroll.common.Log;
@@ -13,11 +12,19 @@ public class PostProcess {
 	private JSONObject foo;
 	private JSONArray elements;
 	private final String LCAT = OverpassModule.LCAT;
-	private JSONObject nodes;
+	private final String ELEMENTS = "elements";
+	private final String TYPE = "type";
+	private final String WAY = "way";
+	private final String NODE = "node";
+	private final String NODES = "nodes";
+	private final String NAME = "name";
+	private final String TAGS = "tags";
+
+	private HashMap<Integer, JSONObject> nodes;
 
 	public PostProcess(JSONObject foo) throws JSONException {
 		this.foo = foo;
-		this.elements = this.foo.getJSONArray("elements");
+		this.elements = this.foo.getJSONArray(ELEMENTS);
 		this.nodes = getNodes();
 	}
 
@@ -30,8 +37,8 @@ public class PostProcess {
 		HashSet<String> ways = new HashSet<String>();
 		for (int i = 0; i < elements.length(); i++) {
 			JSONObject element = elements.getJSONObject(i);
-			if (element.getString("type").equals("way")) {
-				String name = element.getJSONObject("tags").getString("name");
+			if (element.getString(TYPE).equals(WAY)) {
+				String name = element.getJSONObject(TAGS).getString(NAME);
 				ways.add(name);
 			}
 		}
@@ -45,14 +52,13 @@ public class PostProcess {
 		JSONArray ways = new JSONArray();
 		for (int i = 0; i < elements.length(); i++) {
 			JSONObject element = elements.getJSONObject(i);
-			if (element.getString("type").equals("way")) {
+			if (element.getString(TYPE).equals(WAY)) {
 				JSONArray points = new JSONArray();
 				JSONObject way = new JSONObject();
-				way.put("tags", element.getJSONObject("tags"));
-				JSONArray nodeIds = element.getJSONArray("nodes");
+				way.put(TAGS, element.getJSONObject(TAGS));
+				JSONArray nodeIds = element.getJSONArray(NODES);
 				for (int j = 0; j < nodeIds.length(); j++) {
-					String id = "" + nodeIds.getInt(j);
-					points.put(getPointById(id));
+					points.put(getPointById(nodeIds.getInt(j)));
 				}
 				concatArray(ways, points);
 				way.put("points", points);
@@ -74,18 +80,18 @@ public class PostProcess {
 		return result;
 	}
 
-	private JSONObject getPointById(String id) throws JSONException {
-		JSONObject node = this.nodes.getJSONObject(id);
+	private JSONObject getPointById(int id) throws JSONException {
+		JSONObject node = this.nodes.get(id);
 		return new JSONObject("{latitude:" + node.getDouble("lat")
 				+ ",longitude:" + node.getDouble("lon") + "}");
 	}
 
-	private JSONObject getNodes() throws JSONException {
-		JSONObject bar = new JSONObject();
+	private HashMap<Integer, JSONObject> getNodes() throws JSONException {
+		HashMap<Integer, JSONObject> bar = new HashMap<Integer, JSONObject>();
 		for (int i = 0; i < elements.length(); i++) {
 			JSONObject node = elements.getJSONObject(i);
-			if (node.getString("type").equals("node")) {
-				bar.put("" + node.getInt("id"), node);
+			if (node.getString(TYPE).equals(NODE)) {
+				bar.put(node.getInt("id"), node);
 			}
 		}
 		return bar;

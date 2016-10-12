@@ -63,7 +63,7 @@ OP.getStreetsByPosition({
 
 The next convenience function give us all post boxes.
 
-###Retreiving of aminities by position/radius or bounding box
+###Retreiving of [aminities](http://wiki.openstreetmap.org/wiki/Key:amenity) by position/radius or bounding box
 ```javascript
 
 OP.getPOIs({
@@ -76,6 +76,21 @@ OP.getPOIs({
 		console.log(e);
 });
 ```
+
+###Retreiving of [emergency rooms](http://wiki.openstreetmap.org/wiki/Key:emergency) by position/radius or bounding box
+```javascript
+
+OP.getPOIs({
+		latitude : 53.5653801,
+		longitude : 9.98625,
+		radius : 1250,
+		"emergency" : "room"
+	},
+	function(e) {
+		console.log(e);
+});
+```
+
 
 If this convenience function are not enough you can use more generic functions:
 
