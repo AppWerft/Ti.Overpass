@@ -11,6 +11,7 @@ package de.appwerft.overpass;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.appcelerator.kroll.KrollDict;

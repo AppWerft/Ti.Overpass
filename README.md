@@ -8,9 +8,7 @@ The Overpass API offers a variety of search possibilities. This is also known as
 ##Usage
 ```javascript
 var OP = require("de.appwerft.overpass");
-OP.setEndpoint(OP.ENDPOINT_RAMBLER); // optiona, default is OP.ENDPOINT_RAMBLER
 ```
-Possible endpoints are ENDPOINT_MAIN, ENDPOINT_RAMBLER, ENDPOINT_FRENCH
 
 You can put your own endpoint (if you maintain an own server) in tiapp.xml:
 ```xml
@@ -18,15 +16,15 @@ You can put your own endpoint (if you maintain an own server) in tiapp.xml:
 ```
 
 ##Some examples:
+
 ###Retreiving the street "Am Brunnenhof" in Hamburg" as polyline
 ```javascript
-OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);',
-	null, 
+OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);out skel;',
 	function(e) {
 		console.log(e);
 });
 ```
-The second parameter defines the output format. Can be 'skel' (only positions), 'body' (default) or 'meta'.
+The last query parameter defines the output format. Can be 'skel' (only positions), 'body' (default) or 'meta'.
 For your convenience you can use the following methods too:
 ```javascript
 getBody(query,function(){});
