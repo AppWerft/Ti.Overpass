@@ -2,6 +2,7 @@ package de.appwerft.overpass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
@@ -83,9 +84,8 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 					res.put("success", true);
 					if (obj instanceof JSONObject) {
 						res.put("result", new KrollDict((JSONObject) obj));
-					} else if (obj instanceof JSONArray) {
-						JSONArray jArray = (JSONArray) obj;
-						res.put("result", jArray);
+					} else if (obj instanceof HashSet) {
+						res.put("result", ((HashSet<String>) obj).toArray());
 					}
 					onResult.call(krollObject, res);
 				} catch (IllegalArgumentException e) {

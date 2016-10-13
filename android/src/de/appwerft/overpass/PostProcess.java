@@ -32,7 +32,7 @@ public class PostProcess {
 		return foo;
 	}
 
-	public JSONObject getStreetNames() throws JSONException {
+	public HashSet<String> getStreetNames() throws JSONException {
 		Log.d(LCAT, "start getWays");
 		HashSet<String> ways = new HashSet<String>();
 		for (int i = 0; i < elements.length(); i++) {
@@ -42,9 +42,7 @@ public class PostProcess {
 				ways.add(name);
 			}
 		}
-		JSONObject result = new JSONObject();
-		result.put("names", ways.toArray());
-		return result;
+		return ways;
 	}
 
 	public JSONArray getWays() throws JSONException {
