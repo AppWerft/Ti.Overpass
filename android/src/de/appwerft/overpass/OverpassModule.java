@@ -57,35 +57,32 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void createRequest(String query, String out, Object res)
 			throws UnsupportedEncodingException {
-		if (query == null || res == null)
-			return;
-		if (out != null && (out == "skel" || out == "meta" || out == "body")) {
-			this.out = out;
-		}
-		if (res != null & res instanceof KrollFunction)
+		if (query != null && res != null && res instanceof KrollFunction) {
+			if (out != null
+					&& (out == "skel" || out == "meta" || out == "body")) {
+				this.out = out;
+			}
 			onResult = (KrollFunction) res;
-		doQuery(query, null);
+			doQuery(query, null);
+		}
 	}
 
 	@Kroll.method
 	public void getBody(String query, Object res)
 			throws UnsupportedEncodingException {
-		if (query == null || res == null)
-			return;
-		this.out = "body";
-		if (res != null & res instanceof KrollFunction)
+		if (query != null && res != null && res instanceof KrollFunction) {
+			this.out = "body";
 			onResult = (KrollFunction) res;
-		doQuery(query, null);
-
+			doQuery(query, null);
+		}
 	}
 
 	@Kroll.method
 	public void getSkel(String query, Object res)
 			throws UnsupportedEncodingException {
-		if (query != null && res != null) {
+		if (query != null && res != null && res instanceof KrollFunction) {
 			this.out = "skel";
-			if (res != null & res instanceof KrollFunction)
-				onResult = (KrollFunction) res;
+			onResult = (KrollFunction) res;
 			doQuery(query, null);
 		}
 	}
@@ -93,10 +90,9 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getMeta(String query, Object res)
 			throws UnsupportedEncodingException {
-		if (query != null && res != null) {
+		if (query != null && res != null && res instanceof KrollFunction) {
 			this.out = "meta";
-			if (res != null & res instanceof KrollFunction)
-				onResult = (KrollFunction) res;
+			onResult = (KrollFunction) res;
 			doQuery(query, null);
 		}
 	}
@@ -104,11 +100,8 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getStreetsByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (options != null) {
-			if (res != null && res instanceof KrollFunction)
-				onResult = (KrollFunction) res;
-			else
-				Log.e(LCAT, "getStreetsByPosition has no callback for result");
+		if (options != null && res != null && res instanceof KrollFunction) {
+			onResult = (KrollFunction) res;
 			double radius = 1000.0;
 			if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
 				double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
@@ -128,23 +121,20 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getStreetNamesByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (options == null || res == null)
-			return;
-		if (res != null && res instanceof KrollFunction)
+		if (options != null && res != null && res instanceof KrollFunction) {
 			onResult = (KrollFunction) res;
-		else
-			Log.e(LCAT, "getStreetsByPosition has no callback for result");
-		double radius = 1000.0;
-		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
-			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
-			if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
-				double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
-				if (options.containsKeyAndNotNull("radius")) {
-					radius = options.getDouble("radius");
+			double radius = 1000.0;
+			if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
+				double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
+				if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
+					double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
+					if (options.containsKeyAndNotNull("radius")) {
+						radius = options.getDouble("radius");
+					}
+					String query = "way[highway][name](around:" + radius + ","
+							+ lat + "," + lon + ");(._;>;);";
+					doQuery(query, "getStreetNames");
 				}
-				String query = "way[highway][name](around:" + radius + ","
-						+ lat + "," + lon + ");(._;>;);";
-				doQuery(query, "getStreetNames");
 			}
 		}
 	}
@@ -152,48 +142,44 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getAmenitiesByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (options == null || res == null)
-			return;
-		if (res instanceof KrollFunction)
+		if (options != null && res != null && res instanceof KrollFunction) {
 			onResult = (KrollFunction) res;
-		double radius = 1000.0;
-		String[] types = {};
-		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
-			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
-			if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
-				double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
-				if (options.containsKeyAndNotNull("radius")) {
-					radius = options.getDouble("radius");
+			double radius = 1000.0;
+			String[] types = {};
+			if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
+				double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
+				if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
+					double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
+					if (options.containsKeyAndNotNull("radius")) {
+						radius = options.getDouble("radius");
+					}
+					if (options.containsKeyAndNotNull("types")) {
+						types = options.getStringArray("types");
+					}
+					String typesString = StringUtils.join(types, "|");
+					String query = "node[~\"^(amenity)$\"~(" + typesString
+							+ ")(around:" + radius + "," + lat + "," + lon
+							+ ");(._;>;)";
+					Log.d(LCAT, "overpass-Query: " + query);
+					doQuery(query, null);
 				}
-				if (options.containsKeyAndNotNull("types")) {
-					types = options.getStringArray("types");
-				}
-				String typesString = StringUtils.join(types, "|");
-				String query = "node[~\"^(amenity)$\"~(" + typesString
-						+ ")(around:" + radius + "," + lat + "," + lon
-						+ ");(._;>;)";
-				Log.d(LCAT, "overpass-Query: " + query);
-				doQuery(query, null);
 			}
 		}
-
 	}
 
 	@Kroll.method
 	public void getPOIs(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (options == null || res == null)
-			return;
-		if (res instanceof KrollFunction)
+		if (options != null && res != null && res instanceof KrollFunction) {
 			onResult = (KrollFunction) res;
-		for (String key : options.keySet()) {
-			if (key.equals("bbx")) {
-				Float[] coords = toFloatArray(options.get("bbx"));
-			} else {
+			for (String key : options.keySet()) {
+				if (key.equals("bbx")) {
+					Float[] coords = toFloatArray(options.get("bbx"));
+				} else {
 
+				}
 			}
 		}
-
 	}
 
 	private Float[] toFloatArray(Object objectArray) {
@@ -226,10 +212,4 @@ public class OverpassModule extends KrollModule {
 				getKrollObject(), onResult, postProcess);
 		client.get(url, params, respHandler);
 	};
-
-	@Kroll.setProperty
-	public void setEndpoint(String ep) {
-		this.ENDPOINT = ep;
-	}
-
 }

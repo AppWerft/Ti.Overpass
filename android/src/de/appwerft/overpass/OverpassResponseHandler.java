@@ -79,13 +79,15 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 				}
 				try {
 					Object obj = method.invoke(postProcess);
-
+					KrollDict res = new KrollDict();
+					res.put("success", true);
 					if (obj instanceof JSONObject) {
-						KrollDict res = new KrollDict();
-						res.put("success", true);
 						res.put("result", new KrollDict((JSONObject) obj));
-						onResult.call(krollObject, res);
+					} else if (obj instanceof JSONArray) {
+						JSONArray jArray = (JSONArray) obj;
+						res.put("result", jArray);
 					}
+					onResult.call(krollObject, res);
 				} catch (IllegalArgumentException e) {
 				} catch (IllegalAccessException e) {
 				} catch (InvocationTargetException e) {

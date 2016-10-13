@@ -47,7 +47,7 @@ public class PostProcess {
 		return result;
 	}
 
-	public JSONObject getWays() throws JSONException {
+	public JSONArray getWays() throws JSONException {
 		Log.d(LCAT, "start getWays");
 		JSONArray ways = new JSONArray();
 		for (int i = 0; i < elements.length(); i++) {
@@ -65,9 +65,7 @@ public class PostProcess {
 				ways.put(way);
 			}
 		}
-		JSONObject result = new JSONObject();
-		result.put("streets", ways);
-		return result;
+		return ways;
 	}
 
 	private JSONArray concatArray(JSONArray... arrs) throws JSONException {
