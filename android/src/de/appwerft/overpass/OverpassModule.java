@@ -57,6 +57,8 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void createRequest(String query, String out, Object res)
 			throws UnsupportedEncodingException {
+		if (query == null || res == null)
+			return;
 		if (out != null && (out == "skel" || out == "meta" || out == "body")) {
 			this.out = out;
 		}
@@ -68,48 +70,57 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getBody(String query, Object res)
 			throws UnsupportedEncodingException {
+		if (query == null || res == null)
+			return;
 		this.out = "body";
 		if (res != null & res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		doQuery(query, null);
+
 	}
 
 	@Kroll.method
 	public void getSkel(String query, Object res)
 			throws UnsupportedEncodingException {
-		this.out = "skel";
-		if (res != null & res instanceof KrollFunction)
-			onResult = (KrollFunction) res;
-		doQuery(query, null);
+		if (query != null && res != null) {
+			this.out = "skel";
+			if (res != null & res instanceof KrollFunction)
+				onResult = (KrollFunction) res;
+			doQuery(query, null);
+		}
 	}
 
 	@Kroll.method
 	public void getMeta(String query, Object res)
 			throws UnsupportedEncodingException {
-		this.out = "meta";
-		if (res != null & res instanceof KrollFunction)
-			onResult = (KrollFunction) res;
-		doQuery(query, null);
+		if (query != null && res != null) {
+			this.out = "meta";
+			if (res != null & res instanceof KrollFunction)
+				onResult = (KrollFunction) res;
+			doQuery(query, null);
+		}
 	}
 
 	@Kroll.method
 	public void getStreetsByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (res != null && res instanceof KrollFunction)
-			onResult = (KrollFunction) res;
-		else
-			Log.e(LCAT, "getStreetsByPosition has no callback for result");
-		double radius = 1000.0;
-		if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
-			double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
-			if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
-				double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
-				if (options.containsKeyAndNotNull("radius")) {
-					radius = options.getDouble("radius");
+		if (options != null) {
+			if (res != null && res instanceof KrollFunction)
+				onResult = (KrollFunction) res;
+			else
+				Log.e(LCAT, "getStreetsByPosition has no callback for result");
+			double radius = 1000.0;
+			if (options.containsKeyAndNotNull(TiC.PROPERTY_LATITUDE)) {
+				double lat = options.getDouble(TiC.PROPERTY_LATITUDE);
+				if (options.containsKeyAndNotNull(TiC.PROPERTY_LONGITUDE)) {
+					double lon = options.getDouble(TiC.PROPERTY_LONGITUDE);
+					if (options.containsKeyAndNotNull("radius")) {
+						radius = options.getDouble("radius");
+					}
+					String query = "way[highway][name](around:" + radius + ","
+							+ lat + "," + lon + ");(._;>;);";
+					doQuery(query, "getWays");
 				}
-				String query = "way[highway][name](around:" + radius + ","
-						+ lat + "," + lon + ");(._;>;);";
-				doQuery(query, "getWays");
 			}
 		}
 	}
@@ -117,6 +128,8 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getStreetNamesByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
+		if (options == null || res == null)
+			return;
 		if (res != null && res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		else
@@ -139,7 +152,9 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getAmenitiesByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (res != null & res instanceof KrollFunction)
+		if (options == null || res == null)
+			return;
+		if (res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		double radius = 1000.0;
 		String[] types = {};
@@ -167,7 +182,9 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getPOIs(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
-		if (res != null & res instanceof KrollFunction)
+		if (options == null || res == null)
+			return;
+		if (res instanceof KrollFunction)
 			onResult = (KrollFunction) res;
 		for (String key : options.keySet()) {
 			if (key.equals("bbx")) {
