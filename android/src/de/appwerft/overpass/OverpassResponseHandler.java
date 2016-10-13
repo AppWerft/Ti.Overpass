@@ -2,7 +2,9 @@ package de.appwerft.overpass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
@@ -63,6 +65,7 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 		if (onResult != null) {
@@ -78,14 +81,21 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 				} catch (SecurityException e) {
 				} catch (NoSuchMethodException e) {
 				}
+				KrollDict res = new KrollDict();
+				res.put("success", true);
 				try {
 					Object obj = method.invoke(postProcess);
-					KrollDict res = new KrollDict();
-					res.put("success", true);
 					if (obj instanceof JSONObject) {
 						res.put("result", new KrollDict((JSONObject) obj));
 					} else if (obj instanceof HashSet) {
 						res.put("result", ((HashSet<String>) obj).toArray());
+					} else if (obj instanceof JSONArray) {
+						JSONArray jArray = (JSONArray) obj;
+						HashSet<KrollDict> hashSet = new HashSet<KrollDict>();
+						for (int i = 0; i < jArray.length(); i++)
+							hashSet.add(new KrollDict((JSONObject) jArray
+									.get(i)));
+						res.put("result", hashSet.toArray());
 					}
 					onResult.call(krollObject, res);
 				} catch (IllegalArgumentException e) {
