@@ -142,6 +142,71 @@ public class OverpassModule extends KrollModule {
 	@Kroll.method
 	public void getAmenitiesByPosition(KrollDict options, Object res)
 			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "aminity", res);
+	}
+
+	@Kroll.method
+	public void getTourismsByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "tourism", res);
+	}
+
+	@Kroll.method
+	public void getWaterwaysByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "waterway", res);
+	}
+
+	@Kroll.method
+	public void getSportsByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "sport", res);
+	}
+
+	@Kroll.method
+	public void getShopsByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "sport", res);
+	}
+
+	@Kroll.method
+	public void getRoutesPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "route", res);
+	}
+
+	@Kroll.method
+	public void getRailwaysPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "railway", res);
+	}
+
+	@Kroll.method
+	public void getOfficesPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "office", res);
+	}
+
+	@Kroll.method
+	public void getMilitariesByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "military", res);
+	}
+
+	@Kroll.method
+	public void getManmadesByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "man_made", res);
+	}
+
+	@Kroll.method
+	public void getNaturalesByPosition(KrollDict options, Object res)
+			throws UnsupportedEncodingException {
+		getNodesByPosition(options, "natural", res);
+	}
+
+	private void getNodesByPosition(KrollDict options, String nodeType,
+			Object res) throws UnsupportedEncodingException {
 		if (options != null && res != null && res instanceof KrollFunction) {
 			onResult = (KrollFunction) res;
 			double radius = 1000.0;
@@ -157,9 +222,9 @@ public class OverpassModule extends KrollModule {
 						types = options.getStringArray("types");
 					}
 					String typesString = StringUtils.join(types, "|");
-					String query = "node[~\"^(amenity)$\"~(" + typesString
-							+ ")(around:" + radius + "," + lat + "," + lon
-							+ ");(._;>;)";
+					String query = "node[~\"^(" + nodeType + ")$\"~("
+							+ typesString + ")(around:" + radius + "," + lat
+							+ "," + lon + ");(._;>;)";
 					Log.d(LCAT, "overpass-Query: " + query);
 					doQuery(query, null);
 				}

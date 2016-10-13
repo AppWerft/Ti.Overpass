@@ -301,3 +301,16 @@ Answer:
   }
 }
 ```
+##More function
+
+####getAmenitiesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getTourismsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getWaterwaysByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getSportsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getShopsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getRoutesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getRailwaysByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getMilitariesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getManmadesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+####getNaturalesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+
