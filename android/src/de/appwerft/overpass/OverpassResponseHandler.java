@@ -26,10 +26,10 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 	final private String DEFAULTPOSTPROCESS = "passThrough";
 	private String postProcessMethodName = DEFAULTPOSTPROCESS;
 
-	public OverpassResponseHandler(KrollObject o, KrollFunction cb,
-			String postProcessMethodName) {
+	public OverpassResponseHandler(KrollObject o, String postProcessMethodName,
+			KrollFunction callback) {
 		krollObject = o;
-		onResult = cb;
+		onResult = callback;
 		if (postProcessMethodName != null) // in out case default "passthrough"
 			this.postProcessMethodName = postProcessMethodName;
 		startTime = System.currentTimeMillis();
@@ -75,33 +75,41 @@ public final class OverpassResponseHandler extends JsonHttpResponseHandler {
 			try {
 				postProcess = new PostProcess(response);
 				Method method = null;
-				try {
-					method = postProcess.getClass().getMethod(
-							postProcessMethodName);
-				} catch (SecurityException e) {
-				} catch (NoSuchMethodException e) {
-				}
 				KrollDict res = new KrollDict();
 				res.put("success", true);
 				try {
-					Object obj = method.invoke(postProcess);
-					if (obj instanceof JSONObject) {
-						res.put("result", new KrollDict((JSONObject) obj));
-					} else if (obj instanceof HashSet) {
-						res.put("result", ((HashSet<String>) obj).toArray());
-					} else if (obj instanceof JSONArray) {
-						JSONArray jArray = (JSONArray) obj;
-						HashSet<KrollDict> hashSet = new HashSet<KrollDict>();
-						for (int i = 0; i < jArray.length(); i++)
-							hashSet.add(new KrollDict((JSONObject) jArray
-									.get(i)));
-						res.put("result", hashSet.toArray());
+					method = postProcess.getClass().getMethod(
+							postProcessMethodName);
+					try {
+						Object obj = method.invoke(postProcess);
+						if (obj instanceof JSONObject) {
+							res.put("result", new KrollDict((JSONObject) obj));
+						} else if (obj instanceof HashSet) {
+							res.put("result", ((HashSet<String>) obj).toArray());
+						} else if (obj instanceof JSONArray) {
+							JSONArray jArray = (JSONArray) obj;
+							HashSet<KrollDict> hashSet = new HashSet<KrollDict>();
+							for (int i = 0; i < jArray.length(); i++)
+								hashSet.add(new KrollDict((JSONObject) jArray
+										.get(i)));
+							jArray = null;
+							res.put("result", hashSet.toArray());
+						}
+						onResult.call(krollObject, res);
+					} catch (IllegalArgumentException e) {
+						Log.d(LCAT, e.getMessage());
+					} catch (IllegalAccessException e) {
+						Log.d(LCAT, e.getMessage());
+					} catch (InvocationTargetException e) {
+						Log.d(LCAT, e.getMessage());
 					}
-					onResult.call(krollObject, res);
-				} catch (IllegalArgumentException e) {
-				} catch (IllegalAccessException e) {
-				} catch (InvocationTargetException e) {
+
+				} catch (SecurityException e) {
+					Log.d(LCAT, e.getMessage());
+				} catch (NoSuchMethodException e) {
+					Log.d(LCAT, e.getMessage());
 				}
+
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
