@@ -1,11 +1,11 @@
-#Ti.Overpass
+# Ti.Overpass
 
 Titanium module for handling [Overpass protocol](http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example).
 
 The Overpass API offers a variety of search possibilities. This is also known as querying. Lets look into usage.
 <img src="http://overpass-api.de/logo.png" width=600 />
 
-##Usage
+## Usage
 
 First we need a reference to the module:
 ```javascript
@@ -19,7 +19,8 @@ You can put your own endpoint (if you maintain an own server) in tiapp.xml:
 
 Let's start with a simple convenient example. We need all street names nearby a position:
 
-###Retreiving streets nearby, only the names (perhaps for auto completer of an input field)
+### Retreiving streets nearby, only the names (perhaps for auto completer of an input field)
+
 ```javascript
 OP.getStreetNamesByPosition({
 		latitude : 53.5515311,  // MIN Dekanat
@@ -32,6 +33,7 @@ OP.getStreetNamesByPosition({
 ```
 
 With this result:
+
 ```json
 {
 	"result" : {
@@ -49,7 +51,8 @@ With this result:
 ```
 
 Maybe we need all detailed informations about our streets:
-###Retreiving streets by by position/radius
+### Retreiving streets by by position/radius
+
 ```javascript
 OP.getStreetsByPosition({
 		latitude : 53.5653801,
@@ -63,7 +66,8 @@ OP.getStreetsByPosition({
 
 The next convenience function give us all post boxes.
 
-###Retreiving of [aminities](http://wiki.openstreetmap.org/wiki/Key:amenity) by position/radius or bounding box
+### Retreiving of [aminities](http://wiki.openstreetmap.org/wiki/Key:amenity) by position/radius or bounding box
+
 ```javascript
 
 OP.getPOIs({
@@ -77,7 +81,8 @@ OP.getPOIs({
 });
 ```
 
-###Retreiving of [emergency rooms](http://wiki.openstreetmap.org/wiki/Key:emergency) by position/radius or bounding box
+### Retreiving of [emergency rooms](http://wiki.openstreetmap.org/wiki/Key:emergency) by position/radius or bounding box
+
 ```javascript
 
 OP.getPOIs({
@@ -95,7 +100,8 @@ OP.getPOIs({
 If this convenience function are not enough you can use more generic functions:
 
 
-###Retreiving the street "Am Brunnenhof" in Hamburg" as polyline
+### Retreiving the street "Am Brunnenhof" in Hamburg" as polyline
+
 ```javascript
 OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);out skel;',
 	function(e) {
