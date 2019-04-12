@@ -110,6 +110,7 @@ OP.createRequest('way["name"="Am Brunnenhof"];(._;>;);out skel;',
 ```
 The last query parameter defines the output format. Can be 'skel' (only positions), 'body' (default) or 'meta'.
 For your convenience you can use the following methods too:
+
 ```javascript
 getBody(query,function(){});
 getSkel(query,function(){});
@@ -119,6 +120,7 @@ getMeta(query,function(){});
 Here the [result of this query](http://overpass-turbo.eu/s/jfD)
 
 If the street name is not unique on our planet, the you can filter:
+
 ```javascript
 OP.getBody('area[name="Amsterdam"];way(area)["name"="Prinsengracht"];(._;>;);', function(e) {
 	console.log(e);
@@ -129,7 +131,8 @@ Answer you can find [here](http://overpass-turbo.eu/s/jhk).
 <img src="https://raw.githubusercontent.com/AppWerft/Ti.Overpass/master/amsterdam.png" width=560 />
 
 
-###Retreiving all one-way streets in St. Pauli
+### Retreiving all one-way streets in St. Pauli
+
 ```javascript
 OP.getBody('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];(._;>;);',
 		function(e) {
@@ -177,7 +180,7 @@ OP.createRequest('area[name="St. Pauli"];way(area)[highway][name][oneway="yes"];
 });
 ```
 
-###Retreiving all stuff from Hamburgs harbour area:
+### Retreiving all stuff from Hamburgs harbour area:
 
 ```javascript
  var poly = "53.5437410 9.9611520 53.5345088 10.0158279 53.5249939 10.0419642 53.5146603 10.0578009 53.4929643 10.0469022 53.4735433 10.0599703 53.4732304 10.0349187 53.4696478 10.0112404 53.4782174 9.9223417 53.5089534 9.8797752 53.5355864 9.8845872 53.5431290 9.9498294"; 
@@ -188,8 +191,9 @@ OP.createRequest('node(poly:poly)["name"]',
 ```
 Give us 671 nodes. [Result](http://overpass-turbo.eu/s/jg5)
 
-###Generating of all annotations;
-```javascript`
+### Generating of all annotations
+
+```
 OP.createRequest('node(poly:poly)["name"]["amenity"]',
 	null,
 	function(e) {
@@ -203,10 +207,10 @@ OP.createRequest('node(poly:poly)["name"]["amenity"]',
 		}));
 		
 });
-
 ```
 
-###Retreiving  all Stolpersteine in Hamburg
+### Retreiving  all Stolpersteine in Hamburg
+
 ```javascript
 OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"];',
 		null,
@@ -215,6 +219,7 @@ OP.createRequest('area[name="Hamburg"];node(area)["memorial:type"="stolperstein"
 });
 ```
 Answer:
+
 ```json
 {
   "version": 0.6,
@@ -261,7 +266,8 @@ Answer:
 },
 ```
 
-###All pos boxes in Hamburg
+### All pos boxes in Hamburg
+
 ```javascript
 OP.createRequest('node["amenity"="post_box"](53.35,9.8,53.65,10.2);',
 		null,
@@ -269,7 +275,9 @@ OP.createRequest('node["amenity"="post_box"](53.35,9.8,53.65,10.2);',
 			console.log(e);
 });
 ```
+
 Answer:
+
 ```json
 {
   "version": 0.6,
@@ -307,16 +315,16 @@ Answer:
   }
 }
 ```
-##More function
+## More function
 
-####getAmenitiesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getTourismsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getWaterwaysByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getSportsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getShopsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getRoutesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getRailwaysByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getMilitariesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getManmadesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
-####getNaturalesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getAmenitiesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getTourismsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getWaterwaysByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getSportsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getShopsByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getRoutesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getRailwaysByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getMilitariesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getManmadesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
+#### getNaturalesByPosition({latitude:53,longitude:10,radius :100},onLoadFunction)
 
